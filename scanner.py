@@ -1,6 +1,6 @@
 import socket
 t=("45.33.32.156") #target ip address
-p=[22, 80, 443] #ports
+p=[22, 80, 443] #list of ports to scan(ssh,http,https)
 for port in p:
 	s=socket.socket()
 	s.settimeout(2)
