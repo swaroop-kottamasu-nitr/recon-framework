@@ -2,7 +2,7 @@ import socket
 
 def scan_port(t, p):
     s = socket.socket()
-    s.settimeout(0.2)
+    s.settimeout(2)
 
     result = s.connect_ex((t, p))
 

@@ -3,11 +3,13 @@ import socket
 def grab_banner(t, p):
     try:
         s = socket.socket()
-        s.settimeout(0.2)
+        s.settimeout(3)
 
         s.connect((t, p))
-
-        if p == 80:
+        if p == 22:
+            banner = s.recv(1024)
+            s.close()
+        elif p == 80:
             request = (
                 b"GET / HTTP/1.1\r\n"
                 b"Host: localhost\r\n"
@@ -16,9 +18,9 @@ def grab_banner(t, p):
 
             s.send(request)
 
-        banner = s.recv(1024)
+            banner = s.recv(1024)
 
-        s.close()
+            s.close()
 
         return banner.decode(errors="ignore")
 
