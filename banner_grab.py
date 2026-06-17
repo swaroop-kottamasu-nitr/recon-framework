@@ -3,7 +3,7 @@ import socket
 def grab_banner(t, p):
     try:
         s = socket.socket()
-        s.settimeout(3)
+        s.settimeout(0.2)
 
         s.connect((t, p))
 
