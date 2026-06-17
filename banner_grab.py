@@ -1,13 +1,26 @@
 import socket
-target = "45.33.32.156"      # Target IP address
-port = 80                     # Port to scan
 
-s=socket.socket()
-s.settimeout(5)
-s.connect((target,port))
+def grab_banner(t, p):
+    try:
+        s = socket.socket()
+        s.settimeout(3)
 
-request = b"GET / HTTP/1.1\r\nHost: scanme.nmap.org\r\nConnection: close\r\n\r\n"
-s.send(request)
-response = s.recv(4096)         # Receive the response from the server (up to 4096 bytes)
-print(response.decode(errors='ignore'))     # Decode the response, ignoring any decoding errors
-s.close()
+        s.connect((t, p))
+
+        if p == 80:
+            request = (
+                b"GET / HTTP/1.1\r\n"
+                b"Host: localhost\r\n"
+                b"Connection: close\r\n\r\n"
+            )
+
+            s.send(request)
+
+        banner = s.recv(1024)
+
+        s.close()
+
+        return banner.decode(errors="ignore")
+
+    except:
+        return "No banner received"
