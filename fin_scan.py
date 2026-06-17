@@ -46,5 +46,5 @@ print("------------------")
 print(f"\nTotal Closed Ports: {cc}")
 if oc:
     print("\nOpen|Filtered Ports:\n")
-    print(oc)
+    print(sorted(oc))
 print(f"\nTotal Open|Filtered Ports: {len(oc)}")
