@@ -1,4 +1,5 @@
-from scapy.all import IP, TCP, sr1
+from scapy.all import *
+from utils.timing import random_delay
 def run():
     print("Starting FIN Scan...\n")
     from concurrent.futures import ThreadPoolExecutor
@@ -19,7 +20,7 @@ def run():
             dport=port,
             flags="F"
         )
-
+        random_delay()  # Introduce a random delay before sending the packet
         response = sr1(
             packet,
             timeout=1,

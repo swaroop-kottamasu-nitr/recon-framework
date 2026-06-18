@@ -1,4 +1,5 @@
-from scapy.all import IP, TCP, sr1
+from scapy.all import *
+from utils.timing import random_delay
 
 
 def run():
@@ -21,7 +22,7 @@ def run():
             dport=port,
             flags=""
         )
-
+        random_delay()  # Introduce a random delay before sending the packet
         response = sr1(
             packet,
             timeout=1,

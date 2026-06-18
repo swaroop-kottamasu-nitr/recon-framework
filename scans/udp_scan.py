@@ -1,4 +1,5 @@
 from scapy.all import *
+from utils.timing import random_delay
 def run():
     print("Starting UDP Scan...\n")
 
@@ -22,7 +23,7 @@ def run():
     def udp_scan(port):
         try:
             packet = IP(dst=target) / UDP(dport=port)
-
+            random_delay()  # Introduce a random delay before sending the packet
             response = sr1(
                 packet,
                 timeout=4,

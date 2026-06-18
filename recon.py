@@ -1,4 +1,5 @@
-from scans import null_scan
+
+from utils import timing
 
 
 def display_menu():
@@ -21,6 +22,13 @@ def display_menu():
 
 
 while True:
+    stealth=input("\nDo you want to enable stealth mode? (y/n): ").lower()
+    if stealth == "y":
+        timing.STEALTH_MODE = True
+        print("\nStealth mode enabled.")
+    else:
+        timing.STEALTH_MODE = False
+        print("\nStealth mode disabled.")
 
     display_menu()
 

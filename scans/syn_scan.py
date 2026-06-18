@@ -1,5 +1,5 @@
 from utils.service_enum import enumerate_service
-
+from utils.timing import random_delay
 from scapy.all import *
 
 
@@ -22,7 +22,7 @@ def run():
             dport=port,
             flags="S"
         )
-
+        random_delay()  # Introduce a random delay before sending the packet
         response = sr1(
             packet,
             timeout=2,

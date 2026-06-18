@@ -1,4 +1,6 @@
 from scapy.all import *
+from utils.timing import random_delay
+
 def run():
     print("Starting ACK Scan...\n")
 
@@ -19,7 +21,7 @@ def run():
                 dport=port,
                 flags="A"
             )
-
+            random_delay()  # Introduce a random delay before sending the packet
             response = sr1(
                 packet,
                 timeout=1.5,

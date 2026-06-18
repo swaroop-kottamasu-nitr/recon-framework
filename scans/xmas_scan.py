@@ -1,4 +1,6 @@
 from scapy.all import *
+from utils.timing import random_delay
+
 def run():
     print("Starting XMAS Scan...\n")
 
@@ -21,6 +23,7 @@ def run():
             dport=port,
             flags="FPU"
         )
+        random_delay()  # Introduce a random delay before sending the packet
 
         response = sr1(
             packet,
