@@ -10,6 +10,23 @@ The project was developed to gain hands-on experience with TCP/IP networking, of
 
 ---
 
+## Screenshots
+
+### Main Menu
+![Main Menu](docs/screenshots/menu.png)
+
+### OS Fingerprinting
+![OS Fingerprinting](docs/screenshots/os_fingerprint.png)
+
+### Full Recon Scan
+![Full Recon](docs/screenshots/full_recon.png)
+
+### TXT Report
+![TXT Report](docs/screenshots/example_text_report.png)
+
+### JSON Report
+![JSON Report](docs/screenshots/example_json_report.png)
+
 ## Features
 
 ### Port Scanning
@@ -80,56 +97,73 @@ A single command workflow that:
 * ThreadPoolExecutor
 
 ---
-
 ## Project Structure
 
 ```text
 red-recon/
 │
 ├── recon.py
+├── README.md
+├── requirements.txt
+├── .gitignore
 │
 ├── scans/
+│   ├── __init__.py
+│   ├── tcp_connect.py
 │   ├── syn_scan.py
 │   ├── ack_scan.py
 │   ├── fin_scan.py
 │   ├── xmas_scan.py
 │   ├── null_scan.py
-│   ├── udp_scan.py
-│   └── tcp_connect_scan.py
+│   └── udp_scan.py
 │
 ├── fingerprint/
+│   ├── __init__.py
 │   └── os_fingerprint.py
 │
 ├── recon_modules/
+│   ├── __init__.py
 │   └── full_recon.py
 │
 ├── utils/
+│   ├── __init__.py
 │   ├── banner_grabber.py
 │   ├── service_enum.py
+│   ├── version_detector.py
 │   ├── report_generator.py
 │   ├── timing.py
-│   └── evasion.py
+│   ├── evasion.py
+│   └── services.py
 │
-├── reports/
+├── docs/
+│   └── screenshots/
+│       ├── menu.png
+│       ├── os_fingerprint.png
+│       ├── full_recon.png
+│       ├── example_text_report.png
+│       └── example_json_report.png
 │
-├── requirements.txt
-│
-└── README.md
+└── reports/
 ```
 
+### Directory Description
+
+| Directory/File      | Purpose                                                       |
+| ------------------- | ------------------------------------------------------------- |
+| `recon.py`          | Main entry point and menu system                              |
+| `scans/`            | All TCP and UDP scanning modules                              |
+| `fingerprint/`      | Operating system fingerprinting engine                        |
+| `recon_modules/`    | High-level reconnaissance workflows                           |
+| `utils/`            | Helper modules for enumeration, reporting, timing and evasion |
+| `docs/screenshots/` | Screenshots used in documentation                             |
+| `reports/`          | Generated TXT and JSON reconnaissance reports                 |
+| `requirements.txt`  | Project dependencies                                          |
+| `.gitignore`        | Git ignore configuration                                      |
+| `README.md`         | Project documentation                                         |
+
+```
+```
 ---
-## Screenshots
-
-### Main Menu
-![Main Menu](docs/screenshots/menu.png)
-
-### Full Recon
-![Full Recon](docs/screenshots/full_recon.png)
-
-### OS Fingerprinting
-![OS Fingerprint](docs/screenshots/os_fingerprint.png)
-
-
 ## Installation
 
 Clone the repository:
