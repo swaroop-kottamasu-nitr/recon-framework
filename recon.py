@@ -1,5 +1,23 @@
 
 from utils import timing
+from utils import evasion
+print("Loading Red Recon Framework...")
+print("\nScan Profile")
+
+print("1. Aggressive (Fast, less stealthy)")
+print("2. Normal (Balanced)")
+print("3. Paranoid (Slow, very stealthy)")
+choice = input("Choose profile: (1-3): ")
+if choice == "1":
+    timing.PROFILE = "aggressive"
+elif choice == "2":
+    timing.PROFILE = "normal"
+elif choice == "3":
+    timing.PROFILE = "stealth"
+else:
+    print("Invalid choice. Using normal profile.")
+    timing.PROFILE = "normal"
+evasion.FRAGMENTATION = input("Enable packet fragmentation? (y/n): ").lower() == "y"
 
 
 def display_menu():
@@ -16,19 +34,13 @@ def display_menu():
     print("6. UDP Scan")
     print("7. OS Fingerprint")
     print("8. NULL Scan")
-    print("9. Exit")
+    print("9. Full Recon Scan")
+    print("10. Exit")
 
     print("=" * 40)
 
 
 while True:
-    stealth=input("\nDo you want to enable stealth mode? (y/n): ").lower()
-    if stealth == "y":
-        timing.STEALTH_MODE = True
-        print("\nStealth mode enabled.")
-    else:
-        timing.STEALTH_MODE = False
-        print("\nStealth mode disabled.")
 
     display_menu()
 
@@ -67,6 +79,9 @@ while True:
         null_scan.run()
 
     elif choice == "9":
+        from recon_modules import full_recon
+        full_recon.run()
+    elif choice == "10":
         print("\nExiting Red Recon Framework...")
         break
 

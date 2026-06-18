@@ -1,12 +1,60 @@
 from utils.service_enum import enumerate_service
 from utils.timing import random_delay
 from scapy.all import *
+from utils.evasion import (FRAGMENTATION, fragment_packet)
 import random
+from concurrent.futures import ThreadPoolExecutor
+
+
+def scan_target(target, start_port, end_port):
+
+    open_ports = []
+
+    def syn_scan(port):
+
+        src_port = random.randint(1024, 65535)
+
+        packet = IP(dst=target) / TCP(
+            sport=src_port,
+            dport=port,
+            flags="S"
+        )
+
+        random_delay()
+
+        response = sr1(
+            packet,
+            timeout=1,
+            verbose=0
+        )
+
+        if response and response.haslayer(TCP):
+
+            flags = response[TCP].flags
+
+            if flags == 0x12:
+
+                open_ports.append(port)
+
+                rst = IP(dst=target) / TCP(
+                    dport=port,
+                    flags="R"
+                )
+
+                send(rst, verbose=0)
+
+    ports = range(start_port, end_port + 1)
+
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        executor.map(syn_scan, ports)
+
+    return sorted(open_ports)
+
 
 def run():
     print("Starting SYN Scan...\n")
 
-    from concurrent.futures import ThreadPoolExecutor
+    
     
     target = input("Enter target IP: ")
 
@@ -14,18 +62,24 @@ def run():
     end_port = int(input("End port: "))
 
     print(f"\nSYN Scanning {target}...\n")
+    if FRAGMENTATION:
+
+        print(
+              "[*] Packet fragmentation support enabled"
+        )
 
 
     def syn_scan(port):
         src_port = random.randint(1024, 65535)
         packet = IP(dst=target) / TCP(sport=src_port, dport=port, flags="S")
         random_delay()  # Introduce a random delay before sending the packet
+        
+        
         response = sr1(
             packet,
-            timeout=2,
+            timeout=1,
             verbose=0
-        )
-    
+        )        
         if response and response.haslayer(TCP):
 
             flags = response[TCP].flags
@@ -68,9 +122,35 @@ def run():
                 send(rst, verbose=0)
 
 
-    ports = range(start_port, end_port + 1)
+    open_ports = scan_target(target, start_port, end_port)
+    for port in open_ports:
 
-    with ThreadPoolExecutor(max_workers=50) as executor:
-        executor.map(syn_scan, ports)
+        result = enumerate_service(
+            target,
+            port
+        )
 
+        print(f"\n[+] Port {port} OPEN")
+
+        print(
+            f"    Service: "
+            f"{result['service']}"
+        )
+
+        if result["banner"]:
+
+            banner = result["banner"]
+
+            first_line = banner.split("\n")[0]
+
+            print(
+                f"    Version: "
+                f"{first_line}"
+            )
+
+        else:
+
+            print(
+                "    Version: Unknown"
+            )
     print("\nScan Complete!")

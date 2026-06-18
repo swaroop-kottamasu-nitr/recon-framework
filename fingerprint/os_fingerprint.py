@@ -22,14 +22,16 @@ def icmp_fingerprint(target):
         "code": response[ICMP].code
     }
 
-def run():
-    
-    target = input("Enter target IP: ")
+def fingerprint_target(target, open_ports=None):
+
+
 
     print("\nFingerprinting Target...\n")
-
+    fingerprint_port = 80
+    if open_ports:
+        fingerprint_port = open_ports[0]
     packet = IP(dst=target) / TCP(
-        dport=80,
+        dport=fingerprint_port,
         flags="S"
     )
 
@@ -41,7 +43,20 @@ def run():
 
     if not response or not response.haslayer(TCP):
         print("No response received.")
-        return
+        return {
+            "os": "Unknown",
+            "confidence": "Low",
+            "ttl": None,
+            "window": None,
+            "options": [],
+            "icmp": None,
+            "evidence": ["No TCP fingerprint response received."],
+            "scores": {
+                "Linux/Unix": 0,
+                "Windows": 0,
+                "Network Device": 0
+            }
+        }
 
     ttl = response.ttl
     window = response[TCP].window
@@ -226,6 +241,11 @@ def run():
     else:
 
         confidence = "Low"
+    if highest_score == 0:
+
+        likely_os = "Unknown"
+        confidence = "Low"
+
 
     # Ubuntu Detection
 
@@ -238,81 +258,89 @@ def run():
     ):
 
         likely_os = "Ubuntu Linux"
+    return {
+        "os": likely_os,
+        "confidence": confidence,
+        "ttl": ttl,
+        "window": window,
+        "options": option_names,
+        "icmp": icmp_data,
+        "evidence": evidence,
+        "scores": scores
+    }
 
-    # Report
+def run():
 
-    print("=" * 40)
+    target = input("Enter target IP: ")
+
+    result = fingerprint_target(target)
+
+    print("\n" + "=" * 40)
     print("      OS FINGERPRINT REPORT")
     print("=" * 40)
 
     print(f"\nTarget: {target}")
 
-    print(f"\nTTL Value: {ttl}")
-    print(f"TCP Window Size: {window}")
+    if result["ttl"] is not None:
 
+        print(f"\nTTL Value: {result['ttl']}")
+        print(f"TCP Window Size: {result['window']}")
+
+    else:
+
+        print("\nTCP Fingerprint Data Unavailable")
     print("\nTCP Options:")
 
-    if options:
+    if result["options"]:
 
-        for option in options:
+        for option in result["options"]:
+
             print(f"  {option}")
 
     else:
 
         print("  None")
 
-    if icmp_data:
+    if result["icmp"]:
 
         print("\nICMP Analysis")
         print("-------------")
 
         print(
-            f"ICMP TTL: {icmp_data['ttl']}"
+            f"ICMP TTL: "
+            f"{result['icmp']['ttl']}"
         )
 
         print(
-            f"ICMP Type: {icmp_data['type']}"
+            f"ICMP Type: "
+            f"{result['icmp']['type']}"
         )
 
         print(
-            f"ICMP Code: {icmp_data['code']}"
+            f"ICMP Code: "
+            f"{result['icmp']['code']}"
         )
-    print("\nPacket Signature Analysis:")
-    print("--------------------------")
-    if packet_signatures:
-
-        signature_str = ", ".join(packet_signatures)
-        print(f"TCP Options Signature: {signature_str}")
-
-    else:
-
-        print("No TCP options detected.")
-    
-    if len(packet_signatures) >= 4:
-
-        signature_strength = "Strong"
-    elif len(packet_signatures) >= 2:
-
-        signature_strength = "Moderate"
-    else:
-        signature_strength = "Weak"
-    print(f"Fingerprint Strength: {signature_strength}")
 
     print("\nEvidence:")
 
-    for item in evidence:
+    for item in result["evidence"]:
+
         print(f"✓ {item}")
 
     print("\nScores:")
-    print(f"Linux/Unix: {linux_score}")
-    print(f"Windows: {windows_score}")
-    print(
-        f"Network Device: {network_device_score}"
-    )
+
+    for os_name, score in result["scores"].items():
+
+        print(
+            f"{os_name}: {score}"
+        )
 
     print("\nLikely Operating System:")
-    print(likely_os)
+    print(result["os"])
 
-    print(f"\nConfidence: {confidence}")
+    print(
+        f"\nConfidence: "
+        f"{result['confidence']}"
+    )
 
     print("\nFingerprinting Complete.")

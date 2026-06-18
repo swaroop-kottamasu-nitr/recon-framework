@@ -1,17 +1,27 @@
 import random
 import time
 
+PROFILE = "normal"
 
-STEALTH_MODE = False
 
 
 def random_delay():
 
-    if STEALTH_MODE:
+    if PROFILE == "aggressive":
 
+
+        delay = random.uniform(
+            0,
+            0.05
+        )
+    elif PROFILE == "normal":
         delay = random.uniform(
             0.1,
             0.5
         )
-
-        time.sleep(delay)
+    else:
+        delay = random.uniform(
+            0.5,
+            2
+        )    
+    time.sleep(delay)
