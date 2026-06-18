@@ -1,35 +1,66 @@
-from concurrent.futures import ThreadPoolExecutor
-from scanner import scan_port
-from banner_grab import grab_banner
-from services import get_service
+from scans import null_scan
 
 
+def display_menu():
+
+    print("\n" + "=" * 40)
+    print("      RED RECON FRAMEWORK")
+    print("=" * 40)
+
+    print("1. TCP Connect Scan")
+    print("2. SYN Scan")
+    print("3. ACK Scan")
+    print("4. FIN Scan")
+    print("5. XMAS Scan")
+    print("6. UDP Scan")
+    print("7. OS Fingerprint")
+    print("8. NULL Scan")
+    print("9. Exit")
+
+    print("=" * 40)
 
 
-target = input("Enter target IP: ")
+while True:
 
-start_port = int(input("Enter start port: "))
-end_port = int(input("Enter end port: "))
+    display_menu()
 
-print(f"\nScanning {target}...\n")
+    choice = input("Choose option: ")
 
+    if choice == "1":
+        from scans import tcp_connect
+        tcp_connect.run()
 
-def scan_target(port):
+    elif choice == "2":
+        from scans import syn_scan
+        syn_scan.run()
 
-    if scan_port(target, port):
+    elif choice == "3":
+        from scans import ack_scan
+        ack_scan.run()
 
-        service = get_service(port)
+    elif choice == "4":
+        from scans import fin_scan
+        fin_scan.run()
 
-        print(f"\n[+] Port {port} OPEN ({service})")
+    elif choice == "5":
+        from scans import xmas_scan
+        xmas_scan.run()
 
-        if service in ["HTTP", "HTTPS", "SSH", "FTP"]:
-            banner = grab_banner(target, port)
-            print(f"    Banner: {banner[:100]}")
+    elif choice == "6":
+        from scans import udp_scan
+        udp_scan.run()
 
-ports = range(start_port, end_port + 1)
+    elif choice == "7":
+        from fingerprint import os_fingerprint
+        os_fingerprint.run()
 
-with ThreadPoolExecutor(max_workers=50) as executor:
+    elif choice == "8":
+        from scans import null_scan
+        null_scan.run()
 
-    executor.map(scan_target, ports)
+    elif choice == "9":
+        print("\nExiting Red Recon Framework...")
+        break
 
-print("\nScan Complete!")
+    else:
+        print("\nInvalid choice.")
