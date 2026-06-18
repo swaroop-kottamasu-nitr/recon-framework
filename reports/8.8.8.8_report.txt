@@ -1,0 +1,31 @@
+==================================================
+         FULL RECON REPORT
+==================================================
+Generated on: 2026-06-18 20:26:27.393340
+Target: 8.8.8.8
+OPEN PORTS
+--------------------
+
+Port: 53
+Service: DNS
+
+Port: 443
+Service: HTTPS
+
+Port: 853
+Service: UNKNOWN
+
+Total Open Ports: 3
+
+OS FINGERPRINT
+--------------------
+Likely OS: Windows
+Confidence: Medium
+
+TTL: 121
+Window size: 65535
+
+Evidence:
+- TTL (121) suggests Windows
+- Window Size (65535) matches common Windows values
+- ICMP TTL (117) suggests Windows
