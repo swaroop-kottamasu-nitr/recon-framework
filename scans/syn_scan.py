@@ -1,7 +1,7 @@
 from utils.service_enum import enumerate_service
 from utils.timing import random_delay
 from scapy.all import *
-
+import random
 
 def run():
     print("Starting SYN Scan...\n")
@@ -17,11 +17,8 @@ def run():
 
 
     def syn_scan(port):
-
-        packet = IP(dst=target) / TCP(
-            dport=port,
-            flags="S"
-        )
+        src_port = random.randint(1024, 65535)
+        packet = IP(dst=target) / TCP(sport=src_port, dport=port, flags="S")
         random_delay()  # Introduce a random delay before sending the packet
         response = sr1(
             packet,

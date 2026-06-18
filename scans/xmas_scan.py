@@ -1,5 +1,6 @@
 from scapy.all import *
 from utils.timing import random_delay
+import random
 
 def run():
     print("Starting XMAS Scan...\n")
@@ -19,7 +20,9 @@ def run():
 
     def xmas_scan(port):
 
+        src_port = random.randint(1024, 65535)
         packet = IP(dst=target) / TCP(
+            sport=src_port,
             dport=port,
             flags="FPU"
         )
