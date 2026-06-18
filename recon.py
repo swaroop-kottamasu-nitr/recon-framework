@@ -2,6 +2,21 @@
 from utils import timing
 from utils import evasion
 print("Loading Red Recon Framework...")
+print(r"""
+    ██████╗ ███████╗██████╗
+    ██╔══██╗██╔════╝██╔══██╗
+    ██████╔╝█████╗  ██║  ██║
+    ██╔══██╗██╔══╝  ██║  ██║
+    ██║  ██║███████╗██████╔╝
+    ╚═╝  ╚═╝╚══════╝╚═════╝
+
+    ██████╗ ███████╗ ██████╗ ██████╗ ███╗   ██╗
+    ██╔══██╗██╔════╝██╔════╝██╔═══██╗████╗  ██║
+    ██████╔╝█████╗  ██║     ██║   ██║██╔██╗ ██║
+    ██╔══██╗██╔══╝  ██║     ██║   ██║██║╚██╗██║
+    ██║  ██║███████╗╚██████╗╚██████╔╝██║ ╚████║
+    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝
+    """)
 print("\nScan Profile")
 
 print("1. Aggressive (Fast, less stealthy)")
@@ -22,9 +37,10 @@ evasion.FRAGMENTATION = input("Enable packet fragmentation? (y/n): ").lower() ==
 
 def display_menu():
 
-    print("\n" + "=" * 40)
-    print("      RED RECON FRAMEWORK")
-    print("=" * 40)
+
+    print("=" * 50)
+    print("Automated Red Team Reconnaissance Framework")
+    print("=" * 50)
 
     print("1. TCP Connect Scan")
     print("2. SYN Scan")

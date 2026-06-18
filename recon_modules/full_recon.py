@@ -2,8 +2,10 @@ from scans.syn_scan import scan_target
 from utils.service_enum import enumerate_service
 from fingerprint.os_fingerprint import fingerprint_target
 from utils.report_generator import (save_report,save_json_report)
+import time
 
 def run():
+    start_time = time.time()
     print("=" * 50)
     print("         FULL RECON REPORT")
     print("=" * 50)
@@ -69,8 +71,30 @@ def run():
     print("\n Evidence:")
     for item in os_result['evidence']:
         print(f"✓ {item}")
-    print("\n" + "=" * 50)
+    print("\n" + "=" * 50)    
     print(f"\nReport saved {filename}")
     print(f"JSON report saved: {json_filename}")
+    
+    print("\nSCAN STATISTICS")
+    print("-" * 20)
+
+    print(
+        f"Ports Scanned: "
+        f"{end_port - start_port + 1}"
+    )
+
+    print(
+        f"Open Ports Found: "
+        f"{len(open_ports)}"
+    )
+
+    print(
+        f"Services Detected: "
+        f"{len(services)}"
+    )
+    elapsed = round(time.time()-start_time,2)
+    print(f"\nExecution Time: {elapsed} seconds")
+    
     print("Recon Complete")
+
     print("=" * 50)

@@ -11,3 +11,6 @@ def run():
         s.close()
 
         return result == 0
+    t = (input("\nTarget IP Address: "))
+    p = int(input("\nRequired Port To Connect: "))
+    scan_port(t, p)
