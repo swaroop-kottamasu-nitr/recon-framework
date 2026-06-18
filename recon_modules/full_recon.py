@@ -1,6 +1,7 @@
 from scans.syn_scan import scan_target
 from utils.service_enum import enumerate_service
 from fingerprint.os_fingerprint import fingerprint_target
+from utils.report_generator import (save_report,save_json_report)
 
 def run():
     print("=" * 50)
@@ -24,14 +25,15 @@ def run():
 
     print("\nOpen Ports")
     print("-"*20)
-
+    services = []
     for port in open_ports:
 
         result = enumerate_service(
             target,
             port
         )
-
+        result["port"] = port
+        services.append(result)
         print(f"\n[{port}/tcp]")
 
         print(
@@ -56,6 +58,8 @@ def run():
                 "Version: Unknown"
             )
     os_result = fingerprint_target(target, open_ports)
+    filename = save_report(target, open_ports, services, os_result)
+    json_filename = save_json_report(target, open_ports, services, os_result)
     print("\nOS FINGERPRINT")
     print("--------------")
     print(f"Likely OS: {os_result['os']}")
@@ -66,5 +70,7 @@ def run():
     for item in os_result['evidence']:
         print(f"✓ {item}")
     print("\n" + "=" * 50)
+    print(f"\nReport saved {filename}")
+    print(f"JSON report saved: {json_filename}")
     print("Recon Complete")
     print("=" * 50)
